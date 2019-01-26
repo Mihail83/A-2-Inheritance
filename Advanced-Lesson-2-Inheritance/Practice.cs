@@ -10,11 +10,9 @@ namespace Advanced_Lesson_2_Inheritance
     public static partial class Practice
     {
         /// <summary>
-        /// A.L2.P1/1. Создать консольное приложение, которое может выводить 
-        /// на печатать введенный текст  одним из трех способов: 
-        /// консоль, файл, картинка. 
-        /// </summary>        
-
+        /// AL3-P2/3. Отредактировать консольное приложение Printer. 
+        /// Заменить базовый абстрактный класс на интерфейс.
+        /// </summary>
 
         public static void A_L2_P1_1()
         {
@@ -27,7 +25,7 @@ namespace Advanced_Lesson_2_Inheritance
             Console.WriteLine("3 -  image");
             var printType = Console.ReadLine();
 
-            Printer printer = null;
+            IPrinter printer = null;
             switch (printType)
             {
                 case "1":
@@ -51,56 +49,55 @@ namespace Advanced_Lesson_2_Inheritance
             printer.Print();
         }
     }
-    public abstract class Printer
+    public interface IPrinter
     {
-        public string TextToPrint { get; set; }
-        public Printer()               //конструктор
-        { }
-        public Printer(string str)    //конструктор
-        {
-            TextToPrint = str;
-        }
-        public abstract void Print();
+         string TextToPrint { get; set; }        
+         void Print();
     }
 
-    public class ConsolePrinter : Printer
+    public class ConsolePrinter : IPrinter
     {
+        public string TextToPrint { get; set; }
         ConsoleColor forPrint;
 
-        public override void Print()
+        public  void Print()
         {
             Console.ForegroundColor = forPrint;
             Console.WriteLine(TextToPrint);
         }
-        public ConsolePrinter(string str, ConsoleColor color) : base(str)   //конструктор
-        {
+        public ConsolePrinter(string str, ConsoleColor color)        {
+            TextToPrint = str;
             forPrint = color;
         }
     }
 
-    public class FilePrinter : Printer
+    public class FilePrinter : IPrinter
     {
+        public string TextToPrint { get; set; }
         private string _fileName;
 
-        public FilePrinter(string str, string fileName) : base(str)
+        public FilePrinter(string str, string fileName)
         {
+             TextToPrint = str;
             _fileName = fileName;
         }
-        public override void Print()
+        public  void Print()
         {
             System.IO.File.AppendAllText($@"D:\{_fileName}.txt", TextToPrint);
         }
     }
 
-    public class ImagePrinter : Printer
+    public class ImagePrinter : IPrinter
     {
+        public string TextToPrint { get; set; }
         private string _fileName;
 
-        public ImagePrinter(string str, string fileName) : base(str)
+        public ImagePrinter(string str, string fileName)
         {
+            TextToPrint = str;
             _fileName = fileName;
         }
-        public override void Print()
+        public  void Print()
         {
             int width = 0;
             int height = 0;
